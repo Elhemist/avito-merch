@@ -22,6 +22,11 @@ func (h *Handler) JWTMiddleware() gin.HandlerFunc {
 			return
 		}
 
+		if len(tokenString) < (len("Bearer ")) {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid or expired token"})
+			c.Abort()
+			return
+		}
 		tokenString = tokenString[len("Bearer "):]
 
 		userId, err := h.services.Authorization.ParseToken(tokenString)

@@ -20,11 +20,11 @@ func (h *Handler) InitRoutes() *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.GET("/auth", h.authorization)
+		api.POST("/auth", h.authorization)
 
 		api.Use(h.JWTMiddleware())
 		api.GET("/info", h.getInfo)
-		api.GET("/sendCoin", h.sendCoin)
+		api.POST("/sendCoin", h.sendCoin)
 		api.GET("/buy/:item", h.buyItem)
 	}
 	return router
