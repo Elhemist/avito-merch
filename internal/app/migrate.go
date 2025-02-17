@@ -17,7 +17,6 @@ import (
 const (
 	_defaultAttempts = 20
 	_defaultTimeout  = time.Second
-	debugMode        = true
 )
 
 func Migrations() {
@@ -48,9 +47,14 @@ func Migrations() {
 	if err != nil {
 		log.Fatalf("Migrate: postgres connect error: %s", err)
 	}
-	if debugMode {
-		logrus.Debug(`debugging mode is enabled the table is cleared when you start debugging`)
+
+	envMode, ok := os.LookupEnv("ENV")
+	if ok && envMode == `debug` {
+		logrus.Debug(`debugging mode is enabled, so the table is cleared when you start`)
 		err = m.Down()
+		if err != nil && !errors.Is(err, migrate.ErrNoChange) {
+			log.Fatalf("Migrate: down error: %s", err)
+		}
 	}
 	err = m.Up()
 	defer m.Close()

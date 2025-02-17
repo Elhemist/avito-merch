@@ -16,7 +16,6 @@ import (
 func main() {
 
 	logrus.SetFormatter(new(logrus.JSONFormatter))
-	logrus.Error("Config init error: starting")
 
 	if err := godotenv.Load(); err != nil {
 		logrus.Fatalf("Loading env variables error: %s", err.Error())
@@ -33,7 +32,6 @@ func main() {
 		SSLmode:  "disable",
 	})
 	if err != nil {
-		logrus.Info("not DB init complete")
 		logrus.Fatalf("DB init fail: %s", err.Error())
 	}
 	logrus.Info("DB init complete")
