@@ -19,28 +19,28 @@ func NewUserPostgres(db *sqlx.DB) *UserPostgres {
 }
 
 func (r *UserPostgres) GetUserById(userID uuid.UUID) (models.User, error) {
-	var wallet models.User
+	var user models.User
 
 	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1;", userTable)
-	err := r.db.Get(&wallet, query, userID)
+	err := r.db.Get(&user, query, userID)
 	if err != nil {
 		return models.User{}, fmt.Errorf("no user with id: %d found: %w", userID, err)
 	}
-	return wallet, err
+	return user, err
 }
 
 func (r *UserPostgres) GetUserByName(username string) (models.User, error) {
-	var wallet models.User
+	var user models.User
 
 	query := fmt.Sprintf("SELECT * FROM %s WHERE username = $1;", userTable)
-	err := r.db.Get(&wallet, query, username)
+	err := r.db.Get(&user, query, username)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return models.User{}, nil
 		}
 		return models.User{}, fmt.Errorf("no user with name: %s found: %w", username, err)
 	}
-	return wallet, err
+	return user, err
 }
 
 func (r *UserPostgres) CreateUser(user models.AuthRequest, balance int) (uuid.UUID, error) {
