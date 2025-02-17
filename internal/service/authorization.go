@@ -20,7 +20,7 @@ const (
 	tokenTTL   = time.Hour / 2
 )
 
-type tokenClaims struct {
+type TokenClaims struct {
 	jwt.StandardClaims
 	UserId uuid.UUID `json:"user_id"`
 }
@@ -34,7 +34,7 @@ func NewAuthService(userRepo repository.UserRepository) *AuthorizationService {
 }
 
 func (s *AuthorizationService) CreateUser(user models.AuthRequest) (uuid.UUID, error) {
-	user.Password = generatePasswordHash(user.Password)
+	user.Password = GeneratePasswordHash(user.Password)
 
 	return s.userRepo.CreateUser(user, NEW_USER_BALANCE)
 }
@@ -53,11 +53,11 @@ func (s *AuthorizationService) GenerateToken(userReq models.AuthRequest) (string
 			return "", err
 		}
 		user.ID = id
-	} else if user.PasswordHash != generatePasswordHash(userReq.Password) {
+	} else if user.PasswordHash != GeneratePasswordHash(userReq.Password) {
 		return "", fmt.Errorf("Unauthorized")
 	}
 
-	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &tokenClaims{
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, &TokenClaims{
 		jwt.StandardClaims{
 			ExpiresAt: time.Now().Add(tokenTTL).Unix(),
 			IssuedAt:  time.Now().Unix(),
@@ -69,7 +69,7 @@ func (s *AuthorizationService) GenerateToken(userReq models.AuthRequest) (string
 }
 
 func (s *AuthorizationService) ParseToken(accessToken string) (uuid.UUID, error) {
-	token, err := jwt.ParseWithClaims(accessToken, &tokenClaims{}, func(token *jwt.Token) (interface{}, error) {
+	token, err := jwt.ParseWithClaims(accessToken, &TokenClaims{}, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, errors.New("invalid signing method")
 		}
@@ -80,7 +80,7 @@ func (s *AuthorizationService) ParseToken(accessToken string) (uuid.UUID, error)
 		return uuid.Nil, err
 	}
 
-	claims, ok := token.Claims.(*tokenClaims)
+	claims, ok := token.Claims.(*TokenClaims)
 	if !ok {
 		return uuid.Nil, errors.New("invalid token struct")
 	}
@@ -88,7 +88,7 @@ func (s *AuthorizationService) ParseToken(accessToken string) (uuid.UUID, error)
 	return claims.UserId, nil
 }
 
-func generatePasswordHash(password string) string {
+func GeneratePasswordHash(password string) string {
 	hash := sha1.New()
 	hash.Write([]byte(password))
 

@@ -7,8 +7,6 @@ import (
 	"github.com/jmoiron/sqlx"
 )
 
-// UserRepo           repository.UserRepository
-// TransactionRepo    repository.TransactionRepository
 type UserRepository interface {
 	CreateUser(user models.AuthRequest, balance int) (uuid.UUID, error)
 	GetUserByName(username string) (models.User, error)
@@ -31,15 +29,6 @@ type InventoryRepository interface {
 	BuyItem(userID, walletID uuid.UUID, itemId int) error
 }
 
-// type Tender interface {
-// GetAllTenders() ([]models.Tender, error)
-// GetUserTenders(username string) ([]models.Tender, error)
-// CreateTender(tender models.Tender) (models.Tender, error)
-// EditTender(tenderId int, tender models.UpdateTenderRequest) (models.Tender, error)
-// RollbackTender(tender models.Tender) error
-// GetHistoryTender(tenderId int, version int) (models.Tender, error)
-// DoesTenderExists(tenderId int) (bool, error)
-// }
 type Repository struct {
 	InventoryRepository
 	WalletRepository
