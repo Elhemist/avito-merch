@@ -18,7 +18,6 @@ ALTER TABLE transactions ADD CONSTRAINT fk_sender FOREIGN KEY (sender_id) REFERE
 ALTER TABLE transactions ADD CONSTRAINT fk_receiver FOREIGN KEY (receiver_id) REFERENCES users(id);
 
 CREATE INDEX idx_wallets_user_id ON wallets(user_id);
-CREATE INDEX idx_wallets_id ON wallets(id);
 
 CREATE INDEX idx_transactions_receiver_id ON transactions(receiver_id);
 CREATE INDEX idx_transactions_sender_id ON transactions(sender_id);

@@ -5,6 +5,3 @@ CREATE TABLE IF NOT EXISTS users (
     username VARCHAR(255) NOT NULL UNIQUE,
     password_hash VARCHAR(255) NOT NULL
 );
-
-CREATE INDEX idx_users_username ON users(username);
-CREATE INDEX idx_users_id ON users(id);

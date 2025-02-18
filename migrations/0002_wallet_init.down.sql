@@ -1,9 +1,3 @@
-DROP INDEX IF EXISTS idx_transactions_sender_id;
-DROP INDEX IF EXISTS idx_transactions_receiver_id;
-
-DROP INDEX IF EXISTS idx_wallets_id;
-DROP INDEX IF EXISTS idx_wallets_user_id;
-
 ALTER TABLE transactions DROP CONSTRAINT fk_receiver;
 ALTER TABLE transactions DROP CONSTRAINT fk_sender;
 

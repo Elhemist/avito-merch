@@ -14,7 +14,6 @@ CREATE TABLE IF NOT EXISTS inventory (
 ALTER TABLE inventory ADD CONSTRAINT fk_purchase_user FOREIGN KEY (user_id) REFERENCES users(id);
 ALTER TABLE inventory ADD CONSTRAINT fk_purchase_merch FOREIGN KEY (merch_item_id) REFERENCES merch(id);
 
-CREATE INDEX idx_merch_id ON merch(id);
 CREATE INDEX idx_merch_name ON merch(name);
 
 CREATE INDEX idx_inventory_user_id ON inventory(user_id);
